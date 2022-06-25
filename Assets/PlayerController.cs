@@ -2,7 +2,6 @@
 
 class PlayerController : IController<Vector2>
 {
-    Vector2 IController<Vector2>.State { set; }
-
+    //this의 타입이 IController<Vector2> 일때는 setter만 사용가능함
     public Vector2 State { get; set; }
 }

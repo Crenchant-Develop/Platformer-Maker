@@ -2,7 +2,7 @@ using UnityEngine;
 
 interface IController<StateType>
 {
-    StateType State { get; set; }
+    public StateType State { set; }
 }
 
 interface IAction
