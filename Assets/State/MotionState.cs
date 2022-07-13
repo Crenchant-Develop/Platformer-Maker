@@ -13,7 +13,7 @@ public class MotionState : IStatable<Transform>, IStatable<Rigidbody>, IStatable
     public Transform Transform { get; }
     public Rigidbody Rigidbody { get; }
     public Vector Direction { get => Rigidbody.velocity.normalized; }
-    public float Speed { get => Rigidbody.velocity.magnitude; }
+    public float Speed { get => Rigidbody.velocity.magnitude; set => Rigidbody.velocity = Direction * value; }
 
     object IStatable.Handle => Transform.gameObject;
     Transform IStatable<Transform>.Handle { get => Transform; }
