@@ -1,4 +1,3 @@
-<<<<<<< Updated upstream
 ﻿using UnityEngine;
 
 class Test : MonoBehaviour
@@ -7,6 +6,3 @@ class Test : MonoBehaviour
     {
     }
 }
-=======
-﻿
->>>>>>> Stashed changes
