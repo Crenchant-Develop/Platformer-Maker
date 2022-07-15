@@ -1,8 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 class Test : MonoBehaviour
 {
-    protected void Awake()
-    {
-    }
 }

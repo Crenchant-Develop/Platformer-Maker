@@ -1,19 +1,8 @@
 ﻿using System;
 
-public interface IStateConnectable<in T, out StateT>
-where StateT : class, IStatable<T>
-{
-    public StateT State { get; }
 
-    public virtual T OnHandle
-    {
-        set
-        {
-            State.OnHandle(value);
-        }
-    }
-}
-
-public interface IStateConnectable<T> : IStateConnectable<T, IStatable<T>>
+public interface IStateConnectable<T, out IStatable> : IHandleable<T>
+where IStatable : class, IStatable<T>
 {
+    public IStatable State { get; }
 }
