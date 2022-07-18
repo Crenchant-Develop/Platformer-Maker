@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using UnityEngine;
 
 
-public interface IControllable<T, out IStatable> : IStateConnectable<T, IStatable>
-where IStatable : class, IStatable<T>
+public interface IControllable<T> : IStateConnectable<T>
 {
 }
