@@ -24,6 +24,12 @@ where T : class, new()
             State = stateHandler.State;
         }
     }
+    public S CastToState<S>(Component from)
+    where S : class, IStateConnectable<T>, new()
+    {
+        S stateConnectable = from as S ?? from.GetComponent<S>();
+        return stateConnectable;
+    }
 
     public IStateConnectable<T> CastToState(Component from)
     {
@@ -48,6 +54,14 @@ public static class StateExtender
         var stateConnectable =
             (from as IStateConnectable<T>) ??
             (from as Component).GetComponent<IStateConnectable<T>>();
+        return stateConnectable;
+    }
+
+    public static S CastToState<T, S>(this Component from)
+    where S : class, IStateConnectable<T>, new()
+    where T : class, new()
+    {
+        S stateConnectable = from as S ?? from.GetComponent<S>();
         return stateConnectable;
     }
 }

@@ -8,4 +8,5 @@ using System.Runtime.CompilerServices;
 public interface IActionable<T> : IStateConnectable<T>
 where T : class, new()
 {
+    void Update() { }
 }
