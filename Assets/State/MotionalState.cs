@@ -1,0 +1,29 @@
+﻿using UnityEngine;
+
+class MotionalState : IMotionable
+{
+    public (float speed, Vector2 direction) Handle { get; set; }
+}
+
+interface IMotionConnectable : IStateConnectable<MotionalState>, IMotionable
+{
+}
+
+class MotionConnector : MonoBehaviour, IMotionConnectable
+{
+    IMotionConnectable MotionConnectable { get; }
+
+    [field:SerializeField]
+    public Component Component { get; set; }
+
+    public Component Join { get => Component; set => MotionConnectable.Join = value; }
+    
+    public MotionalState State { get; set; }
+    public (float speed, Vector2 direction) Handle { get => State.Handle; set => State.Handle = value; }
+
+    public MotionConnector() 
+    {
+        MotionConnectable = this;
+        Join = Component;
+    }
+}

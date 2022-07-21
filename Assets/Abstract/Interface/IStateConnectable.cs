@@ -1,43 +1,53 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using System.Runtime.CompilerServices;
 
 public interface IStateConnectable<T>
+where T : class, new()
 {
-    public IStateConnectable<T> State { get; set; }
-    public T Handle { get => State.Handle; set => State.Handle = value; }
+    public T State { get; set; }
+
+    public Component Join
+    {
+        set
+        {
+            var stateHandler = CastToState(value);
+            if (stateHandler.State is null)
+            {
+                State = new T();
+                stateHandler.State = State;
+                return;
+            }
+
+            State = stateHandler.State;
+        }
+    }
+
+    public IStateConnectable<T> CastToState(Component from)
+    {
+        return from.CastToState<T>();
+    }
 }
 
-public static class StateConnectableExtender
+public static class StateExtender
 {
-    public static S CreateConnect<T, S>(this IStateConnectable<T> connectable)
-    where S : class, IStateConnectable<T>, new()
+    public static IStateConnectable<T> CastToState<T>(this Component from)
+    where T : class, new()
     {
-        S connectTarget = new()
-        {
-            State = connectable
-        };
-        connectable.State = connectTarget;
-        return connectTarget;
+        var stateConnectable =
+            from as IStateConnectable<T> ??
+            from.GetComponent<IStateConnectable<T>>();
+        return stateConnectable;
     }
 
-    public static IA CreateConnectedControllable<T, IA>(this IControllable<T> controllable)
-    where IA : class, IActionable<T>, new()
+    public static IStateConnectable<T> CastToState<T>(this UnityEngine.Object from)
+    where T : class, new()
     {
-        return controllable.CreateConnect<T, IA>();
-    }
-
-    public static IC CreateConnectedActionable<T, IC>(this IActionable<T> actionable)
-    where IC : class, IControllable<T>, new()
-    {
-        return actionable.CreateConnect<T, IC>();
-    }
-
-    public static void CreateConnect<T, IC, IA>(out IC controllable, out IA actionable)
-    where IC : class, IControllable<T>, new()
-    where IA : class, IActionable<T>, new()
-    {
-        controllable = new();
-        actionable = new();
-        controllable.State = actionable;
-        actionable.State = controllable;
+        var stateConnectable =
+            (from as IStateConnectable<T>) ??
+            (from as Component).GetComponent<IStateConnectable<T>>();
+        return stateConnectable;
     }
 }
