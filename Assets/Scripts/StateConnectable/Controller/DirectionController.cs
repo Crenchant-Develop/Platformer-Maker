@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 using static UnityEngine.Physics2D;
 
 public class DirectionController : MotionConnector, IControllable<MotionalState>
@@ -16,7 +17,7 @@ public class DirectionController : MotionConnector, IControllable<MotionalState>
 
     public bool IsWall 
     {
-        get 
+        get
         {
             return Raycast(transform.position, State.Direction, State.Speed, detectableLayerMasks[0]);
         }
@@ -59,4 +60,3 @@ public class DirectionController : MotionConnector, IControllable<MotionalState>
         }
     }
 }
-
