@@ -11,8 +11,9 @@ public class Movement : MotionConnector, IActionable<MotionalState>
         Rigidbody.velocity = State.Velocity;
     }
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         Rigidbody = GetComponent<Rigidbody>();
     }
 }
