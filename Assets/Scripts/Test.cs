@@ -14,7 +14,6 @@ class Test : MonoBehaviour
 
     private void Awake()
     {
-
     }
 
     public static implicit operator Test(Func<dynamic> v)
