@@ -1,23 +1,24 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 
 class Test : MonoBehaviour
 {
+    public Func<dynamic> refer;
+
+    public Test(Func<dynamic> refer)
+    {
+        this.refer = refer;
+    }
+
     private void Awake()
     {
-        ITuple t = (32, 32);
-        (int a, int b) copy = ((int a, int b))t;
 
-        copy.a = 22;
+    }
 
-        if (t.Equals(copy))
-        {
-            print("레퍼런스가 같습니다." + t[0]);
-        }
-        else
-        {
-            print("레퍼런스가 다릅니다." + t[0]);
-        }
+    public static implicit operator Test(Func<dynamic> v)
+    {
+        return new Test(v);
     }
 }
