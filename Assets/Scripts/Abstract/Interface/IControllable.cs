@@ -6,7 +6,6 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-
 public interface IControllable<T> : IStateConnectable<T>
 where T : class, new()
 {
