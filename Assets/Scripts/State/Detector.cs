@@ -25,10 +25,11 @@ public class Detector : IStateHandler<Collision>
     // 현재 콜라이더의 사이즈를 반환하는 메서드.
     public Vector2 Size => Collider.bounds.size;
 
-    //! 이 프로퍼티가 반환하는 값이 무엇을 의미하는지 잘 모르겠습니다.
+    //! 질문 : 프로퍼티에 리턴만 있으면 getter과 setter 중에서 어느 것과
+    //!       연관이 있다고 봐야 하나요?
     public Rect Bounds => new(Collider.transform.position, Collider.bounds.size);
 
-    //! 이 프로퍼티가 어떤 역할을 하는지 잘 모르겠습니다.
+    //! 질문 : 이 프로퍼티가 어떤 역할을 하는지 잘 모르겠습니다.
     public Collision Handle
     {
         get

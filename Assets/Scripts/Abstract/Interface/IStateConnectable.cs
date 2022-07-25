@@ -9,7 +9,7 @@ using System.Runtime.CompilerServices;
 //? 확인 필요 : 0개
 
 //* (       )하는 스크립트.
-//! 질문 : 뭐하는 스크립트인지 잘 모르겠습니다.
+//! 질문 : 위에 빈 칸을 채워주세요.
 public interface IStateConnectable<T>
 where T : class, new()
 {
@@ -65,6 +65,7 @@ where T : class, new()
 }
 
 // 확장성을 위해 오버로드된 확장 메서드 3개를 담고 있는 클래스.
+
 public static class StateExtender
 {
     public static IStateConnectable<T> CastToState<T>(this Component from)

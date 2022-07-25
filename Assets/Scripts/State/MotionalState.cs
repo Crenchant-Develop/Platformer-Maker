@@ -27,7 +27,7 @@ public class MotionalState : IMotionable, IVellocity
         set
         {
             //! 질문 : value가 양수든 음수든 음수가 나오면 이 if문은 왜 있는건가요?
-            //!       if문이 없는 것과 거의 똑같아 보이는데요.
+            //!       if문이 없는 것과 거의 똑같아 보여서요.
             if (-value * value == -1)
             {
                 // X 방향을 value로 초기화함.

@@ -19,12 +19,14 @@ public class MotionConnector : MonoBehaviour, IMotionConnectable
     [field:SerializeField] public virtual Component Component { get; set; }
 
     // TODO : 자동 구현 프로퍼티에 대해 알아보기.
-    //! 질문 : 이 프로퍼티의 역할을 잘 모르겠습니다.
+    // 움직임과 관련된 여러 요소들을 포함하는 State 프로퍼티.
     public MotionalState State { get; set; }
 
     // 튜플로 선언된 프로퍼티.
     // 튜플은 구조체이기 때문에 생성자에서 무조건 멤버 변수들을 초기화 해주어야 한다.
-    //! 질문 : 튜플을 간접적으로 사용한 부분.
+
+    //! 질문 : 아래처럼 말해도 말이 되나요?
+    //!       튜플 변수들은 이 프로퍼티의 로컬 변수라고도 볼수 있다.
     public (float speed, Vector2 direction) Handle { get => State.Handle; set => State.Handle = value; }
 
     // 유니티에서 제공하는 함수.
