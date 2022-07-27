@@ -5,19 +5,35 @@ using UnityEngine;
 
 class Test : MonoBehaviour
 {
-    public Func<dynamic> refer;
-
-    public Test(Func<dynamic> refer)
-    {
-        this.refer = refer;
-    }
+    [SerializeField]
+    List<LayerMask> layerMaskList = new();
+    List<ContactPoint2D> contacts = new();
 
     private void Awake()
     {
+        foreach (var layerMask in layerMaskList)
+        {
+            layerMaskList[0] += layerMask;
+            layerMaskList.Remove(layerMask);
+        }
     }
 
-    public static implicit operator Test(Func<dynamic> v)
+    private void OnCollisionEnter2D(Collision2D collision)
     {
-        return new Test(v);
+        if (collision.gameObject.layer == layerMaskList[0])
+        {
+            GetContacts(collision.collider);
+        }
+    }
+
+    public void GetContacts(Collider2D collider2D)
+    {
+        collider2D.GetContacts(contacts);
+        foreach (var contact in contacts)
+        {
+            print(contact.normal);
+        }
     }
 }
+
+

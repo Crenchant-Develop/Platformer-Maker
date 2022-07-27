@@ -1,37 +1,73 @@
-﻿using UnityEngine;
-using Collider = UnityEngine.Collider2D;
-using Collision = UnityEngine.Collision;
+﻿using Collider = UnityEngine.Collider2D;
+using Collision = UnityEngine.Collision2D;
+using ContactPoint = UnityEngine.ContactPoint2D;
 
+
+using System;
+using System.Collections.Generic;
+using UnityEngine;
+
+
+[Serializable]
 public class Detector : IStateHandler<Collision>
 {
-    public Detector(Collider collider)
-    {
-        Collider = collider;
-    }
+    private Collision handle;
+    private List<ContactPoint> contacts = new();
 
-    public Collision collision;
-
-    public float Width => Collider.bounds.size.x;
-    public float Height => Collider.bounds.size.y;
-
-    public Vector2 Size => Collider.bounds.size;
-    public Rect Bounds => new(Collider.transform.position, Collider.bounds.size);
-
-    public Collider Collider { get; }
-    public Collision Handle
+    [field: SerializeField]
+    public virtual List<LayerMask> DetectableLayerMasks { get; set; }
+    public virtual Collision Handle
     {
         get
         {
-            return collision;
+            return handle;
         }
-
         set
         {
-            if (value.collider == Collider)
-            {
+            handle = value;
+            Collider collider = value.collider;
 
-            }
-            collision = value;
+            collider.GetContacts(contacts);
         }
+    }
+    public virtual Action<ContactPoint> OnHandleInvoke
+    {
+        set
+        {
+            foreach (var contact in contacts)
+            {
+                LayerMask layerMask = contact.GetLayerMask();
+                if (layerMask.Equals(DetectableLayerMasks[0]))
+                {
+                    value(contact);
+                }
+            }
+        }
+    }
+
+    public virtual void MergeAllLayerMask()
+    {
+        for (int i = 1; i < DetectableLayerMasks.Count; i++)
+        {
+            DetectableLayerMasks[0] += DetectableLayerMasks[i];
+        }
+    }
+}
+
+public static class DetectorExtender
+{
+    public static LayerMask GetLayerMask(this Component component)
+    {
+        return component.gameObject.layer;
+    }
+
+    public static LayerMask GetLayerMask(this Collision collision)
+    {
+        return collision.gameObject.layer;
+    }
+
+    public static LayerMask GetLayerMask(this ContactPoint contactPoint2D)
+    {
+        return contactPoint2D.collider.GetLayerMask();
     }
 }

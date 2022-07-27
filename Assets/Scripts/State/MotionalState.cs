@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Runtime.CompilerServices;
+using UnityEngine;
 
 public class MotionalState : IMotionable, IVellocity
 {
@@ -10,9 +11,17 @@ public class MotionalState : IMotionable, IVellocity
         }
     }
 
-    protected (float speed, Vector2 direction) handle;
 
-    public float Speed { get => Handle.speed; set => handle.speed = value; }
+    protected (float speed, Vector2 direction) handle;
+    public (float speed, Vector2 direction) Handle { get => handle; set => handle = value; }
+
+    public virtual Vector2 Velocity
+    {
+        get => Handle.direction * Handle.speed;
+    }
+    public float Speed { get => handle.speed; set => handle.speed = value; }
+    public Vector2 Direction { get => handle.direction; set => handle.direction = value; }
+
     public float DirectionX
     {
         get => handle.direction.x; 
@@ -26,7 +35,6 @@ public class MotionalState : IMotionable, IVellocity
             handle.direction = new Vector2(value, DirectionY).normalized;
         }
     }
-
     public float DirectionY
     {
         get => handle.direction.y; 
@@ -40,14 +48,4 @@ public class MotionalState : IMotionable, IVellocity
             handle.direction = new Vector2(DirectionX, value).normalized;
         }
     }
-    public Vector2 Direction { get => handle.direction; set => handle.direction = value; }
-
-    public virtual Vector2 Velocity
-    {
-        get => Handle.direction * Handle.speed;
-    }
-
-
-    public (float speed, Vector2 direction) Handle { get => handle; set => handle = value; }
 }
-

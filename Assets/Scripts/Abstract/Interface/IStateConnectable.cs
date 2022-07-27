@@ -9,7 +9,7 @@ where T : class, new()
 {
     public T State { get; set; }
 
-    //이 프로퍼티 메소드는 대부분 생성자같은 곳에서 호출한다.
+    //이 프로퍼티 메소드는 대부분 Awake나 Init메소드 또는 생성자같은 곳에서 호출한다.
     public Component Join
     {
         set
