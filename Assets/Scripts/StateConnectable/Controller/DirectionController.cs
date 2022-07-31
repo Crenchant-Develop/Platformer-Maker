@@ -12,10 +12,17 @@ public class DirectionController : MotionConnector, IControllable<MotionalState>
         const int max = 1;
         const int apply = max + 1;
         //방향 랜덤하게 반전함
-        if (Random.Range(min, apply) is max)
+
+        if (invert == InvertHorizontal || invert == InvertVertical)
         {
-            invert();
+            if (Random.Range(min, apply) is max)
+            {
+                invert();
+            }
+            return;
         }
+        Debug.LogError($"잘못된 대리자 {nameof(invert)}의 값입니다. \n" +
+            $"{nameof(InvertHorizontal)}이나 {nameof(InvertVertical)}로 지정해주세요. 현재 invert의 값: {invert}");
     }
 
     public void OnRandomHorizontal() 
