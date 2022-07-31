@@ -11,8 +11,8 @@ public class DirectionController : MotionConnector, IControllable<MotionalState>
         const int min = 0;
         const int max = 1;
         const int apply = max + 1;
-        //방향 랜덤하게 반전함
 
+        //방향 랜덤하게 반전함
         if (invert == InvertHorizontal || invert == InvertVertical)
         {
             if (Random.Range(min, apply) is max)
