@@ -1,34 +1,46 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
+using Random = UnityEngine.Random;
 
 public class DirectionController : MotionConnector, IControllable<MotionalState>
 {
-    [SerializeField]
-    float speed;
-
-    public float X { get => State.DirectionX; set => State.DirectionX = value; }
-    public float Y { get => State.DirectionY; set => State.DirectionY = value; }
-
-
-    public void OnRandom()
+    public void OnRandom(Action invert)
     {
         const int min = 0;
         const int max = 1;
         const int apply = max + 1;
         //방향 랜덤하게 결정됨
-        X = Random.Range(min, apply) > 0 ? -1f : 1f;
+        if (Random.Range(min, apply) is max)
+        {
+            invert();
+        }
     }
 
-    public void Invert() 
+    public void OnRandomHorizontal() 
     {
-        X = -X;
+        OnRandom(InvertHorizontal);
+    }
+    
+    public void OnRandomVertical()
+    {
+        OnRandom(InvertVertical);
+    }
+
+    public void InvertHorizontal()
+    {
+        State.Horizontal = -State.Horizontal;
+    }
+
+    public void InvertVertical()
+    {
+        State.Vertical = -State.Vertical;
     }
 
     protected override void Awake()
     {
         base.Awake();
-        OnRandom();
-        State.Speed = speed;
+        OnRandom(InvertHorizontal);
     }
 }

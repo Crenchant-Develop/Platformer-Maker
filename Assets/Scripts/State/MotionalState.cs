@@ -1,47 +1,38 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System;
+using System.Runtime.CompilerServices;
 using UnityEngine;
+using Vector = UnityEngine.Vector2;
 
+[Serializable]
 public class MotionalState : IMotionable, IVellocity
 {
+    [SerializeField]
+    private float speed;
+    [SerializeField]
+    private Vector direction;
+
     public float this[int index]
     {
         set 
         {
-            handle.direction[index] = value;
+            direction[index] = value;
         }
     }
 
-    protected (float speed, Vector2 direction) handle;
-    public (float speed, Vector2 direction) Handle { get => handle; set => handle = value; }
-
-    public virtual Vector2 Velocity
+    public (float speed, Vector direction) Handle
     {
-        get => Handle.direction * Handle.speed;
-    }
-    public float Speed { get => handle.speed; set => handle.speed = value; }
-    public Vector2 Direction { get => handle.direction; set => handle.direction = value; }
+        get => (speed, direction);
 
-    public float DirectionX
-    {
-        get => handle.direction.x;
-        set => Normalize(value, ref handle.direction.x);
-    }
-
-    public float DirectionY
-    {
-        get => handle.direction.y;
-        set => Normalize(value, ref handle.direction.y);
-    }
-
-    public void Normalize(float value, ref float index)
-    {
-        index =
-            value is 0f ? 0f :
-            value < 0f ? -1f : 1f;
-
-        if (index is not 0)
+        set
         {
-            handle.direction.Normalize();
+            speed = value.speed;
+            direction = value.direction;
         }
     }
+
+    public virtual float Speed { get => speed; set => speed = value; }
+    public virtual float Horizontal { get => direction.x; set => direction.x = value; }
+    public virtual float Vertical { get => direction.y; set => direction.y = value; }
+    public virtual Vector Velocity => direction * speed;
+    public virtual Vector Direction { get => direction; set => direction = value; }
 }
