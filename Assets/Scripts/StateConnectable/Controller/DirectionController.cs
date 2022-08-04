@@ -4,6 +4,17 @@ using Random = UnityEngine.Random;
 
 public class DirectionController : MotionConnector, IControllable<MotionalState>
 {
+    enum DirectionType
+    {
+        Invert,
+        Random,
+        Active,
+        Passive
+    }
+
+    [SerializeField]
+    CastableType<DirectionType, int> castable;
+
     private void OnRandom(Action invert)
     {
         const int min = 0;
@@ -47,5 +58,10 @@ public class DirectionController : MotionConnector, IControllable<MotionalState>
     {
         base.Awake();
         OnRandom(InvertHorizontal);
+    }
+
+    private void Update()
+    {
+        
     }
 }
