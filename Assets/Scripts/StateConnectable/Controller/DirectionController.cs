@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements;
 using Random = UnityEngine.Random;
 
 public class DirectionController : MotionConnector, IControllable<MotionalState>
 {
-    public void OnRandom(Action invert)
+    private void OnRandom(Action invert)
     {
         const int min = 0;
         const int max = 1;
@@ -25,11 +23,11 @@ public class DirectionController : MotionConnector, IControllable<MotionalState>
             $"{nameof(InvertHorizontal)}이나 {nameof(InvertVertical)}로 지정해주세요. 현재 invert의 값: {invert}");
     }
 
-    public void OnRandomHorizontal() 
+    public void OnRandomHorizontal()
     {
         OnRandom(InvertHorizontal);
     }
-    
+
     public void OnRandomVertical()
     {
         OnRandom(InvertVertical);

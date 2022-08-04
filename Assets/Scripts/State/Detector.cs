@@ -1,11 +1,9 @@
-﻿using Collider = UnityEngine.Collider2D;
-using Collision = UnityEngine.Collision2D;
-using ContactPoint = UnityEngine.ContactPoint2D;
-
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Collider = UnityEngine.Collider2D;
+using Collision = UnityEngine.Collision2D;
+using ContactPoint = UnityEngine.ContactPoint2D;
 
 
 [Serializable]

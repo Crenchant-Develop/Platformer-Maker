@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 using Vector = UnityEngine.Vector2;
 
 public class MotionConnector : MonoBehaviour, IMotionConnectable
@@ -11,7 +10,7 @@ public class MotionConnector : MonoBehaviour, IMotionConnectable
 
     IMotionConnectable MotionConnectable { get; }
 
-    [field:SerializeField]
+    [field: SerializeField]
     public virtual Component Component { get; set; }
 
     public MotionalState State { get; set; }

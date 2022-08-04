@@ -1,6 +1,4 @@
-﻿using System.Runtime.CompilerServices;
-using UnityEngine;
-using Vector = UnityEngine.Vector2;
+﻿using Vector = UnityEngine.Vector2;
 
 public interface IMotionable : IStateHandler<(float speed, Vector direction)>
 {

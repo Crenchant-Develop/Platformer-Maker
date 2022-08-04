@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 using Vector = UnityEngine.Vector2;
 
@@ -13,7 +12,7 @@ public class MotionalState : IMotionable, IVellocity
 
     public float this[int index]
     {
-        set 
+        set
         {
             direction[index] = value;
         }
