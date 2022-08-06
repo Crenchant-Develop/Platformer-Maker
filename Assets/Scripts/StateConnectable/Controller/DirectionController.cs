@@ -1,47 +1,32 @@
 ﻿using System;
 using UnityEngine;
 using Random = UnityEngine.Random;
+using ContactPoint = UnityEngine.ContactPoint2D;
 
 public class DirectionController : MotionConnector, IControllable<MotionalState>
 {
-    enum DirectionType
+    [field: SerializeField]
+    Detector detector = default;
+
+    protected int RandomSide
     {
-        Invert,
-        Random,
-        Active,
-        Passive
-    }
-
-    [SerializeField]
-    CastableType<DirectionType, int> castable;
-
-    private void OnRandom(Action invert)
-    {
-        const int min = 0;
-        const int max = 1;
-        const int apply = max + 1;
-
-        //방향 랜덤하게 반전함
-        if (invert == InvertHorizontal || invert == InvertVertical)
+        get
         {
-            if (Random.Range(min, apply) is max)
-            {
-                invert();
-            }
-            return;
+            const byte min = 0;
+            const byte max = 1;
+            const byte apply = max + 1;
+            return Random.Range(min, apply) is max ? -1 : 1;
         }
-        Debug.LogError($"잘못된 대리자 {nameof(invert)}의 값입니다. \n" +
-            $"{nameof(InvertHorizontal)}이나 {nameof(InvertVertical)}로 지정해주세요. 현재 invert의 값: {invert}");
     }
 
     public void OnRandomHorizontal()
     {
-        OnRandom(InvertHorizontal);
+        State.Horizontal = RandomSide;
     }
 
     public void OnRandomVertical()
     {
-        OnRandom(InvertVertical);
+        State.Vertical = RandomSide;
     }
 
     public void InvertHorizontal()
@@ -54,14 +39,27 @@ public class DirectionController : MotionConnector, IControllable<MotionalState>
         State.Vertical = -State.Vertical;
     }
 
+    public virtual void OnDetectWall(ContactPoint contact) 
+    {
+        //벽을 감지하면
+        bool isWaill = contact.normal.x != 0;
+        if (isWaill)
+        {
+            //반대로 이동.
+            InvertHorizontal();
+            detector.OnHandleInvoke = null;
+            return;
+        }
+    }
+
     protected override void Awake()
     {
         base.Awake();
-        OnRandom(InvertHorizontal);
-    }
 
-    private void Update()
-    {
-        
+        detector = new Detector
+        {
+            OnHandleInvoke = OnDetectWall
+        };
     }
 }
+

@@ -5,16 +5,16 @@ using Collider = UnityEngine.Collider2D;
 using Collision = UnityEngine.Collision2D;
 using ContactPoint = UnityEngine.ContactPoint2D;
 
-
 [Serializable]
-public class Detector : IStateHandler<Collision>
+public class Detector : IStateHandler<Collider>
 {
-    private Collision handle;
+    private Collider handle = null;
+    private Action<ContactPoint> handleInvoke = null;
     private List<ContactPoint> contacts = new();
 
     [field: SerializeField]
     public virtual List<LayerMask> DetectableLayerMasks { get; set; }
-    public virtual Collision Handle
+    public virtual Collider Handle
     {
         get
         {
@@ -22,25 +22,30 @@ public class Detector : IStateHandler<Collision>
         }
         set
         {
+            //충돌시 정보가 여기에 들어오며,
+            //handleInvoke 대리자를 사용하여 contacts의 정보를 확인할 수 있음
             handle = value;
-            Collider collider = value.collider;
+            handle.GetContacts(contacts);
 
-            collider.GetContacts(contacts);
-        }
-    }
-    public virtual Action<ContactPoint> OnHandleInvoke
-    {
-        set
-        {
+            if (handleInvoke is null)
+            {
+                return;
+            }
             foreach (var contact in contacts)
             {
                 LayerMask layerMask = contact.GetLayerMask();
                 if (layerMask.Equals(DetectableLayerMasks[0]))
                 {
-                    value(contact);
+                    handleInvoke(contact);
                 }
             }
         }
+    }
+
+    public virtual Action<ContactPoint> OnHandleInvoke
+    {
+        get => handleInvoke;
+        set => handleInvoke = value;
     }
 
     public virtual void MergeAllLayerMask()

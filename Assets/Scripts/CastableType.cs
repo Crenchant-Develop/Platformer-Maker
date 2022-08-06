@@ -1,36 +1,57 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using UnityEngine;
 
+
 [Serializable]
-struct CastableType<KeyT, ValueT>
+struct CastableObject<TData, TResult>
+where TData : IConvertible
+where TResult : IConvertible
 {
-    [SerializeField] KeyT key;
-    ValueT value;
+    [SerializeField]
+    private TData target;
+    private TResult value;
 
-    public KeyT Key { get => key; }
-    public ValueT Value { get => value; }
-
-    public static implicit operator CastableType<KeyT, ValueT>(KeyT key) => new(key);
-    public static implicit operator CastableType<KeyT, ValueT>(ValueT value) => new(value);
-
-    public static implicit operator KeyT(CastableType<KeyT, ValueT> casted) => casted.key;
-    public static implicit operator ValueT(CastableType<KeyT, ValueT> casted) => casted.value;
-
-    private CastableType(KeyT key)
+    public TData Target
     {
-        this.key = key;
-        value = (ValueT)(key as IConvertible);
+        get
+        {
+            return target;
+        }
+        set
+        {
+            Cast(value);
+            return;
+        }
+    }
+    public TResult Value { get => value; set => Cast(value); }
+
+    public static implicit operator CastableObject<TData, TResult>(TData data) => new(data);
+    public static implicit operator CastableObject<TData, TResult>(TResult value) => new(value);
+
+    public static implicit operator TData(CastableObject<TData, TResult> casted) => casted.Target;
+    public static implicit operator TResult(CastableObject<TData, TResult> casted) => casted.Value;
+
+    public void Cast(TData convertible)
+    {
+        target = convertible;
+        value = (TResult)(IConvertible)convertible;
     }
 
-    private CastableType(ValueT value)
+    public void Cast(TResult convertible)
     {
-        key = (KeyT)(value as IConvertible);
-        this.value = value;
+        target = (TData)(IConvertible)convertible;
+        value = convertible;
     }
 
-    public CastableType(KeyT key, ValueT value)
+    public CastableObject(TData data) : this()
     {
-        this.key = key;
-        this.value = value;
+        Target = data;
+    }
+
+    public CastableObject(TResult value) : this()
+    {
+        Value = value;
     }
 }
