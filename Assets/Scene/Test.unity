@@ -603,8 +603,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <Component>k__BackingField: {fileID: 282948629}
-  castable:
-    <Key>k__BackingField: 0
+  detector:
+    <DetectableLayerMasks>k__BackingField: []
 --- !u!1 &947701656
 GameObject:
   m_ObjectHideFlags: 0
@@ -698,7 +698,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1537782290}
-  - component: {fileID: 1537782289}
   m_Layer: 0
   m_Name: GameObject
   m_TagString: Untagged
@@ -706,22 +705,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1537782289
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1537782288}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6e6fa5aebbaf08b4a9ffe9068f5c81a3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  getMyClass:
-    age: 0
-    saySomethings: 
-    keyCode: 0
 --- !u!4 &1537782290
 Transform:
   m_ObjectHideFlags: 0
