@@ -17,8 +17,6 @@ public class Movement : MotionConnector, IActionable<MotionalState>
     [field: SerializeField]
     public Detector Detector { get; set; }
 
-    public Vector2 Range { get; private set; }
-
 
     public Rigidbody Rigidbody { get; set; }
 
