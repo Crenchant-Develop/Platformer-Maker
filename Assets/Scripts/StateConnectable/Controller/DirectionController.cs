@@ -1,13 +1,10 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 using Random = UnityEngine.Random;
 using ContactPoint = UnityEngine.ContactPoint2D;
 
 public class DirectionController : MotionConnector, IControllable<MotionalState>
 {
-    [field: SerializeField]
-    Detector detector = default;
-
+    public override MotionalState State { get; set; }
     protected int RandomSide
     {
         get
@@ -38,28 +35,4 @@ public class DirectionController : MotionConnector, IControllable<MotionalState>
     {
         State.Vertical = -State.Vertical;
     }
-
-    public virtual void OnDetectWall(ContactPoint contact) 
-    {
-        //벽을 감지하면
-        bool isWaill = contact.normal.x != 0;
-        if (isWaill)
-        {
-            //반대로 이동.
-            InvertHorizontal();
-            detector.OnHandleInvoke = null;
-            return;
-        }
-    }
-
-    protected override void Awake()
-    {
-        base.Awake();
-
-        detector = new Detector
-        {
-            OnHandleInvoke = OnDetectWall
-        };
-    }
 }
-

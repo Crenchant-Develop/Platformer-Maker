@@ -1,23 +1,20 @@
 ﻿using UnityEngine;
 using Vector = UnityEngine.Vector2;
 
-public class MotionConnector : MonoBehaviour, IMotionConnectable
+public abstract class MotionConnector : BindableObject<MotionalState>, IMotionConnectable
 {
-    public MotionConnector()
+    public static Vector RadianToVector2(float radian)
     {
-        MotionConnectable = this;
+        return Quaternion.AngleAxis(radian, Vector3.forward) * Vector2.right;
     }
 
-    IMotionConnectable MotionConnectable { get; }
-
-    [field: SerializeField]
-    public virtual Component Component { get; set; }
-
-    public MotionalState State { get; set; }
-    public (float speed, Vector direction) Handle { get => State.Handle; set => State.Handle = value; }
-
-    protected virtual void Awake()
+    public static float GetAngle(Vector3 value)
     {
-        MotionConnectable.Join = Component;
+        return Mathf.Atan2(value.y, value.x) * Mathf.Rad2Deg;
+    }
+
+    public static float ClampAngle(Vector3 value, float min, float max, out float angle)
+    {
+        return Mathf.Clamp(angle = GetAngle(value), min, max);
     }
 }

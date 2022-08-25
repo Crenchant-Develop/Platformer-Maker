@@ -9,11 +9,13 @@ using ContactPoint = UnityEngine.ContactPoint2D;
 public class Detector : IStateHandler<Collider>
 {
     private Collider handle = null;
-    private Action<ContactPoint> handleInvoke = null;
     private List<ContactPoint> contacts = new();
+    public readonly Action<ContactPoint> onContactPoint;
 
     [field: SerializeField]
-    public virtual List<LayerMask> DetectableLayerMasks { get; set; }
+    public virtual List<LayerMask> DetectableLayerMasks { get; set; } = new();
+
+    //OnCollision같은 곳에서 호출하면 좋음.
     public virtual Collider Handle
     {
         get
@@ -22,30 +24,19 @@ public class Detector : IStateHandler<Collider>
         }
         set
         {
-            //충돌시 정보가 여기에 들어오며,
-            //handleInvoke 대리자를 사용하여 contacts의 정보를 확인할 수 있음
             handle = value;
             handle.GetContacts(contacts);
-
-            if (handleInvoke is null)
+            ContactPoint contactLast = default;
+            foreach (ContactPoint point in contacts)
             {
-                return;
-            }
-            foreach (var contact in contacts)
-            {
-                LayerMask layerMask = contact.GetLayerMask();
-                if (layerMask.Equals(DetectableLayerMasks[0]))
+                if (point.Equals(contactLast))
                 {
-                    handleInvoke(contact);
+                    break;
                 }
+                contactLast = point;
+                onContactPoint(point);
             }
         }
-    }
-
-    public virtual Action<ContactPoint> OnHandleInvoke
-    {
-        get => handleInvoke;
-        set => handleInvoke = value;
     }
 
     public virtual void MergeAllLayerMask()
@@ -53,17 +44,19 @@ public class Detector : IStateHandler<Collider>
         for (int i = 1; i < DetectableLayerMasks.Count; i++)
         {
             DetectableLayerMasks[0] += DetectableLayerMasks[i];
+            Debug.Log(DetectableLayerMasks[i].ToString());
         }
+    }
+
+    public Detector(Action<ContactPoint> onContact)
+    {
+        MergeAllLayerMask();
+        onContactPoint = onContact;
     }
 }
 
 public static class DetectorExtender
 {
-    public static LayerMask GetLayerMask(this Component component)
-    {
-        return component.gameObject.layer;
-    }
-
     public static LayerMask GetLayerMask(this Collision collision)
     {
         return collision.gameObject.layer;

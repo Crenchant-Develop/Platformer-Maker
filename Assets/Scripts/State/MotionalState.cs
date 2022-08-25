@@ -30,8 +30,10 @@ public class MotionalState : IMotionable, IVellocity
     }
 
     public virtual float Speed { get => speed; set => speed = value; }
-    public virtual float Horizontal { get => direction.x; set => direction.x = value; }
-    public virtual float Vertical { get => direction.y; set => direction.y = value; }
+    public virtual float Horizontal { get => direction.x * speed; set => direction.x = value; }
+    public virtual float Vertical { get => direction.y * speed; set => direction.y = value; }
     public virtual Vector Velocity => direction * speed;
     public virtual Vector Direction { get => direction; set => direction = value; }
+    
+    public bool IsDefault { get => Speed == default; }
 }
