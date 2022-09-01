@@ -35,4 +35,5 @@ public class JoysticState : IStateHandler<(RectTransform center, RectTransform s
     public Vector2 SelectionLocalPostision { get => Selection.anchoredPosition; set => Selection.anchoredPosition = value; }
     
     public Vector2 InputValue { get => SelectionLocalPostision.normalized; }
+    public float Distance { get => SelectionLocalPostision.magnitude < 1f? SelectionLocalPostision.magnitude : 1f; }
 }

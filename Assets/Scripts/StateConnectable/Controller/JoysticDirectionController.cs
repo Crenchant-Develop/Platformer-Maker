@@ -6,9 +6,14 @@ public class JoysticDirectionController : DirectionController, IPointerDownHandl
 {
     [SerializeField]
     JoysticState joysticState = new();
+    
     [SerializeField]
     [Range(0f, 180f)]
     float topCastRange = 120f;
+
+    [SerializeField]
+    [Range(0f, 1f)]
+    float normalizedValue =  0.5f;
 
     public void OnPointerDown(PointerEventData eventData)
     {
@@ -39,6 +44,7 @@ public class JoysticDirectionController : DirectionController, IPointerDownHandl
         joysticState.SelectionLocalPostision = Vector2.ClampMagnitude(joysticState.SelectionLocalPostision, joysticState.MaxDistance);
     }
 
+    //조이스틱 일정 각도 체크
     bool IsTopCast
     {
         get => ClampAngle(joysticState.InputValue, 90f - topCastRange * 0.5f, 90f + topCastRange * 0.5f, out float angle) == angle;
@@ -49,7 +55,9 @@ public class JoysticDirectionController : DirectionController, IPointerDownHandl
         if (State is not null)
         {
             State.Vertical = IsTopCast ? joysticState.InputValue.y : 0f;
-            State.Horizontal = joysticState.InputValue.x;
+            float limitedDistance = joysticState.MaxDistance * normalizedValue;
+            State.Horizontal = 
+            Mathf.Abs(joysticState.SelectionLocalPostision.x) < limitedDistance ? 0f : joysticState.InputValue.x;
         }
     }
 }

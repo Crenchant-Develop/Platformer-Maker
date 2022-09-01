@@ -9,7 +9,11 @@ public class Movement : MotionConnector, IActionable<MotionalState>
     bool isGround;
 
     [field: SerializeField]
-    public float JumpPower { get; set; }
+    public float JumpSpeed { get; set; }
+    [field: SerializeField]
+    public float JumpDistance { get; set; }
+    Vector2 lastPosition;
+    bool isJumping;
 
     [field: SerializeField]
     public override MotionalState State { get; set; }
@@ -17,20 +21,41 @@ public class Movement : MotionConnector, IActionable<MotionalState>
     [field: SerializeField]
     public Detector Detector { get; set; }
 
-
     public Rigidbody Rigidbody { get; set; }
 
     void OnWalk()
     {
+        if (State.Direction == Vector2.zero)
+        {
+            return;
+        }
+
         Rigidbody.velocity = new (State.Horizontal, Rigidbody.velocity.y);
     }
 
     void OnJump()
     {
-        if (isGround && State.Direction.y > 0f)
+        lastPosition = transform.position;
+        var value = Rigidbody.velocity;
+
+        //땅이 아닌경우 상승하지않음 (공중에 있는 경우)
+        //and
+        //지정된 만큼의 점프 높이를 넘기면 상승하지않음 (공중에서 상승중인 경우)
+        if (!isGround && transform.position.y - lastPosition.y > JumpDistance)
         {
-            isGround = false;
-            Rigidbody.AddForce(JumpPower * State.Direction * Vector2.up, ForceMode2D.Impulse);
+            print(Mathf.Abs(transform.position.y - lastPosition.y));
+
+            value.y = 0f;
+            Rigidbody.velocity = value;
+            return;
+        }
+
+        //점프키를 누르는 중일때만 상승함
+        if (State.Direction.y > 0f || isJumping)
+        {
+            isJumping = true;
+            value.y = JumpSpeed;
+            Rigidbody.velocity = value;
         }
     }
 
@@ -48,6 +73,7 @@ public class Movement : MotionConnector, IActionable<MotionalState>
     {
         base.Awake();
         Rigidbody = GetComponent<Rigidbody>();
+        lastPosition = transform.position;
     }
 
     public void Update()
