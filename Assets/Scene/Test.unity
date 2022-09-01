@@ -897,8 +897,7 @@ MonoBehaviour:
     <Center>k__BackingField: {fileID: 745644950}
     <Selection>k__BackingField: {fileID: 959875280}
     <MaxDistance>k__BackingField: 50
-  topCastRangeL: 30
-  topCastRangeR: 150
+  topCastRange: 120
 --- !u!114 &1640984466
 MonoBehaviour:
   m_ObjectHideFlags: 0
